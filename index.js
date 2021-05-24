@@ -8,6 +8,21 @@ const willGenerateThemes = argv['themeName'] ? [argv['themeName']] : [];
 const arabicFontFamily = argv['font'] || '';
 const replaceFontStyle = argv['replaceFontStyle'] || '';
 const isStartedWatcher = argv['w'];
+const help = argv['h'] || argv['help'];
+
+if (help) {
+    console.info('Generate RTL Theme\n');
+    console.info('Usage: npx generate-rtl-theme [options]\n');
+    console.info('Options:')
+    console.info('--path                       set a specific path for your themes');
+    console.info('--themeName                  set a specific theme name');
+    console.info('--font                       set a new font family');
+    console.info('--replaceFontStyle           update specific font styles');
+    console.info('--w                          run with the watcher');
+    console.info('--help, -h                   open helper\n');
+    console.log('You could found more detailed document at https://github.com/smartface/generate-rtl-theme || https://smartface.io');
+    return;
+}
 
 let themeObject = {};
 const classesWithLayout = [
