@@ -13,45 +13,55 @@
 An extension to generate Arabic themes for your existing themes with Smartface Native Framework.
 
 ## Installation
-By default, RTL Theme Generator Extension is installed on any Smartface Project. If not installed or accidentally deleted, you can install it via:
 ```shell
-(cd /projects/workspace/scripts && npm i @smartface/generate-rtl-theme)
+(cd /projects/workspace && npm i @smartface/generate-rtl-theme)
 ```
 ## How to use
-Smartface RTL Theme Generator Extension behaves like a normal npm package. You require/import the packages and you can use your Smartface Application on stereoids!
+Smartface RTL Theme Generator Extension behaves like a normal npm package. You should use it as a CLI tool.
 
 ```shell
-generate-rtl-theme [--path] [--themeName] [--font] [--replaceFontStyle] [-w]
+npx generate-rtl-theme [--path] [--themeName] [--font] [--replaceFontStyle] [-w] [-h, --help]
 ```
 
-If you want to give a specific path for your themes,
-it via:
+If you want to give a specific path for your themes, use:
 ```shell
-generate-rtl-theme --path="/projects/workspace/scripts/generated/themes"
+npx generate-rtl-theme --path="/projects/workspace/scripts/generated/themes"
 ```
 
-If you want to give a specific theme name,
-it via:
+If you want to give a specific theme name, use:
 ```shell
-generate-rtl-theme --themeName="darkTheme.json"
+npx generate-rtl-theme --themeName="darkTheme.json"
 ```
 
-If you want to set a new font family,
-it via:
+If you want to set a new font family, use:
 ```shell
-generate-rtl-theme --font="Barlow"
+npx generate-rtl-theme --font="Barlow"
 ```
 
-If you want to remove some styles,
-it via:
+If you want to convert e.g. Bold to SemiBold, you can use this command(?), use:
 ```shell
-generate-rtl-theme --replaceFontStyle="Semi"
+npx generate-rtl-theme --replaceFontStyle="Semi"
 ```
 
-If you want to run with the watcher,
-it via:
+If you want to run with the watcher, use:
 ```shell
-generate-rtl-theme  -w
+npx generate-rtl-theme -w
+```
+
+If you want to see helper, use:
+```shell
+npx generate-rtl-theme -h
+```
+
+Add an option in the package.json scripts like "watch":
+```json
+{
+    // ...
+    "scripts": {
+        "watch": "SMF_CIDE_WS_PATH=$PWD concurrently 'sfBuilder' 'tsc -w' 'generatertltheme -w'"
+    }
+    // ...
+}
 ```
 
 ## Need Help?
