@@ -56,11 +56,9 @@ npx generate-rtl-theme -h
 Add an option in the package.json scripts like "watch":
 ```json
 {
-    // ...
     "scripts": {
         "watch": "SMF_CIDE_WS_PATH=$PWD concurrently 'sfBuilder' 'tsc -w' 'generatertltheme -w'"
     }
-    // ...
 }
 ```
 
