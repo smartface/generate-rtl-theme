@@ -1,13 +1,15 @@
 const fs = require('fs');
+const path = require('path');
+const chokidar = require('chokidar');
 const minimist = require('minimist');
 
 const argv = minimist(process.argv.slice(2));
 
-const themeDirectoryPath = argv['path'] || './theme/';
+const themeDirectoryPath = path.normalize(argv['path'] || './scripts/generated/themes/');
 const willGenerateThemes = argv['themeName'] ? [argv['themeName']] : [];
-const arabicFontFamily = argv['font'] || '';
+const RTLFontFamily = argv['font'] || '';
 const replaceFontStyle = argv['replaceFontStyle'] || '';
-const isStartedWatcher = argv['w'];
+const isWatchMode = argv['w'];
 const help = argv['h'] || argv['help'];
 
 if (help) {
@@ -20,7 +22,7 @@ if (help) {
     console.info('--replaceFontStyle           update specific font styles');
     console.info('--w                          run with the watcher');
     console.info('--help, -h                   open helper\n');
-    console.log('You could found more detailed document at https://github.com/smartface/generate-rtl-theme || https://smartface.io');
+    console.log('You can find more detailed document at https://github.com/smartface/generate-rtl-theme || https://smartface.io');
     return;
 }
 
@@ -39,7 +41,7 @@ if (!fs.existsSync(themeDirectoryPath)) {
 
 if (willGenerateThemes.length === 0) {
     fs.readdirSync(themeDirectoryPath).forEach(fileName => {
-        if (fileName.slice(-4).toLowerCase() === 'json' && fileName.slice(-7).toLowerCase() !== 'ar.json') {
+        if (fileName.slice(-4).toLowerCase() === 'json' && fileName.slice(-7).toLowerCase() !== 'rtl.json') {
             willGenerateThemes.push(fileName);
         }
     });
@@ -56,10 +58,10 @@ function generateThemes() {
     try {
         willGenerateThemes.forEach(themeName => {
             const themePath = themeDirectoryPath + themeName;
-            const arabicThemePath = themeDirectoryPath + themeName.replace('.json', 'AR.json');
+            const rtlThemePath = themeDirectoryPath + themeName.replace('.json', 'RTL.json');
 
-            isStartedWatcher && initWatcher(themePath, arabicThemePath);
-            start(themePath, arabicThemePath);
+            isWatchMode && initWatcher(themePath, rtlThemePath);
+            start(themePath, rtlThemePath);
         });
     } catch (err) {
         console.error(err);
@@ -69,7 +71,7 @@ function generateThemes() {
 
 generateThemes();
 
-function start(themePath, arabicThemePath) {
+function start(themePath, rtlThemePath) {
     console.info(`Reading ${themePath}`);
     const themeJSON = fs.readFileSync(themePath, 'utf8');
     try {
@@ -78,26 +80,20 @@ function start(themePath, arabicThemePath) {
     catch (e) {
         throw new Error(`An error has occurred when ${themePath} converting to JSON.`, e)
     }
-    console.info('Changing to arabic');
-    themeObject = changeToArabic(themeObject);
-    console.info(`Writing changes to ${arabicThemePath}`);
+    console.info('Converting to RTL...');
+    themeObject = changeToRTL(themeObject);
+    console.info(`Writing changes to ${rtlThemePath}`);
 
     try {
-        fs.writeFileSync(arabicThemePath, JSON.stringify(themeObject, null, '\t'), 'utf8');
+        fs.writeFileSync(rtlThemePath, JSON.stringify(themeObject, null, '\t'), 'utf8');
     }
     catch (e) {
-        throw new Error(`An error has occurred when creating ${arabicThemePath}.`, e)
+        throw new Error(`An error has occurred when creating ${rtlThemePath}.`, e)
     }
-    console.info('Success\n\n');
+    console.info(`Successfully altered ${rtlThemePath} \n\n`);
 }
 
-function initWatcher(themePath, arabicThemePath) {
-    try {
-        var chokidar = require('chokidar');
-    }
-    catch (e) {
-        throw new Error('You need to run "npm install chokidar in the root directory first"');
-    }
+function initWatcher(themePath, rtlThemePath) {
     // Initialize watcher.
     const watcher = chokidar.watch(themePath, {
         ignored: /(^|[\/\\])\../,
@@ -107,10 +103,10 @@ function initWatcher(themePath, arabicThemePath) {
         console.info('.\n.\n.\nDetected changes, Restarting...');
         setTimeout(generateThemes, 1500);
     });
-    console.info(`Waiting for changes in ${arabicThemePath}`);
+    console.info(`Waiting for changes in ${rtlThemePath}`); 
 }
 
-function changeToArabic(object, parentClass, path = '') {
+function changeToRTL(object, parentClass, path = '') {
     let objectModified = false;
 
     if (objectModified) return;
@@ -120,7 +116,7 @@ function changeToArabic(object, parentClass, path = '') {
         .forEach(childObjectClass => {
             const childPath = path + (childObjectClass.startsWith('&') ?
                 childObjectClass.substr(1) : childObjectClass);
-            object[childObjectClass] = changeToArabic(object[childObjectClass], childObjectClass, childPath);
+            object[childObjectClass] = changeToRTL(object[childObjectClass], childObjectClass, childPath);
         });
 
     setRTL(object, parentClass);
@@ -128,7 +124,7 @@ function changeToArabic(object, parentClass, path = '') {
     object.x && (object.x = -object.x);
     object.textAlignment = getTextViewAlignment(object.textAlignment, parentClass);
 
-    if (arabicFontFamily) {
+    if (RTLFontFamily) {
         object.font = changeFont(object.font);
     }
 
@@ -179,7 +175,7 @@ function switchProps(object, firstProp, secondProp) {
 function changeFont(font) {
     if (!font) return;
     if (font.family) {
-        font.family = arabicFontFamily;
+        font.family = RTLFontFamily;
     }
     if (font.style && replaceFontStyle) {
         font.style = font.style.replace(replaceFontStyle, '');
