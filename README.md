@@ -16,12 +16,36 @@ An extension to generate Arabic themes for your existing themes with Smartface N
 ```shell
 (cd /projects/workspace && npm i @smartface/generate-rtl-theme)
 ```
-## How to use
-Smartface RTL Theme Generator Extension behaves like a normal npm package. You should use it as a CLI tool.
+## How to Use the Tool
+ 
 
 ```shell
 npx generate-rtl-theme [--path] [--themeName] [--font] [--replaceFontStyle] [-w] [-h, --help]
 ```
+
+### Recommended Usage
+
+Add an option in the package.json scripts to launch and/or watch":
+```json
+{
+    "scripts": {
+        "generate-rtl": "npx generate-rtl-theme",
+        "generate-rtl:watch": "npx generate-rtl-theme -w"
+    }
+}
+```
+And add the script to your sf(Smartface) script in order to include the automatic generation on your build:
+```json
+{
+    "scripts": {
+        "build:sf": "cross-env ROOT_PATH=$PWD transpiler --standalone && yarn run generate-rtl",
+    }
+}
+```
+
+---
+
+### Other Usages
 
 If you want to give a specific path for your themes, use:
 ```shell
@@ -53,14 +77,9 @@ If you want to see helper, use:
 npx generate-rtl-theme -h
 ```
 
-Add an option in the package.json scripts like "watch":
-```json
-{
-    "scripts": {
-        "watch": "SMF_CIDE_WS_PATH=$PWD concurrently 'sfBuilder' 'tsc -w' 'generatertltheme -w'"
-    }
-}
-```
+## How to Implement Generated Theme on Your Smartface Project
+After generation, you should manually change the theme using [ThemeService.changeTheme](https://github.com/smartface/helloworld-boilerplate/blob/main/scripts/theme.ts#L33) on your Smartface Native project.
+Example usage can be found at [Smartface Docs on Theme Usage](https://docs.smartface.io/smartface-cloud-development/cloud-ide/using-ui-editor-and-classes#changing-theme-on-runtime)
 
 ## Need Help?
 
@@ -69,7 +88,6 @@ Please [submit an issue](https://github.com/smartface/generate-rtl-theme/issues)
 ## Support & Documentation & Useful Links
 - [Guides](https://docs.smartface.io/)
 - [API Docs](http://ref.smartface.io/)
-- [Smartface Cloud Dashboard](https://ide.smartface.io)
 
 ## Code of Conduct
 We are committed to making participation in this project a harassment-free experience for everyone, regardless of the level of experience, gender, gender identity and expression, sexual orientation, disability, personal appearance, body size, race, ethnicity, age, religion, or nationality.
