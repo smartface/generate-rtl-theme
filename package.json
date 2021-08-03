@@ -1,0 +1,27 @@
+{
+  "name": "@smartface/generate-rtl-theme",
+  "version": "1.0.0",
+  "description": "An extension to generate Arabic themes for your existing themes with Smartface Native Framework.",
+  "main": "index.js",
+  "keywords": [
+    "smartface",
+    "plugins",
+    "javascript",
+    "rtl",
+    "cli"
+  ],
+  "author": {
+    "name": "Smartface",
+    "email": "info@smartface.io",
+    "url": "http://smartface.io"
+  },
+  "dependencies": {
+    "chokidar": "^3.5.1",
+    "minimist": "^1.2.5"
+  },
+  "license": "MIT",
+  "homepage": "http://bitbucket.org/smartface-team/sf-plugins#readme",
+  "bin": {
+    "generate-rtl-theme": "node ./index.js"
+  }
+}
