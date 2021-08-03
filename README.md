@@ -10,11 +10,11 @@
 [![Twitter: @Smartface_io](https://img.shields.io/badge/contact-@Smartface_io-blue.svg?style=flat)](https://twitter.com/smartface_io)
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://raw.githubusercontent.com/smartface/generate-rtl-theme/master/LICENSE)
 
-An extension to generate Arabic themes for your existing themes with Smartface Native Framework.
+An extension to generate RTL themes for your existing themes with Smartface Native Framework.
 
 ## Installation
 ```shell
-(cd /projects/workspace && npm i @smartface/generate-rtl-theme)
+yarn add @smartface/generate-rtl-theme
 ```
 ## How to Use the Tool
  
